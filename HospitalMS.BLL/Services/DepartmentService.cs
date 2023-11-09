@@ -12,7 +12,7 @@ namespace HospitalMS.BLL.Services
     public class DepartmentService
     {
         //private readonly ApplicationDbContext _db;
-        private DataAccessFactory _dataAccessFactory;
+        private readonly DataAccessFactory _dataAccessFactory;
         public DepartmentService(ApplicationDbContext db)
         {
             _dataAccessFactory = new DataAccessFactory(db);
@@ -26,5 +26,28 @@ namespace HospitalMS.BLL.Services
             }
             return null;
         }
+
+        public List<Department> Get()
+        {
+            var data = _dataAccessFactory.DepartmentData().Get().ToList();
+            if (data != null)
+            {
+                return data;
+            }
+            return null;
+        }
+
+        public bool Create(Department dept)
+        {
+            var res = _dataAccessFactory.DepartmentData().Add(dept);
+            return (res != null);
+        }
+
+        public  bool Update(Department dept)
+        {       
+            var res = _dataAccessFactory.DepartmentData().Update(dept);
+            return (res != null) ? true : false;
+        }
+
     }
 }
