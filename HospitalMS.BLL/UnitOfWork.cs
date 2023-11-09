@@ -11,11 +11,11 @@ namespace HospitalMS.BLL
     public class UnitOfWork
     {
         private readonly ApplicationDbContext _db;
-        public DepartmentService Department { get; private set; }
+        public DepartmentService_TEMP Department { get; private set; }
         public UnitOfWork(ApplicationDbContext db)
         {
             _db = db;
-            Department = new DepartmentService(_db);
+            Department = new DepartmentService_TEMP(_db);
         }
 
     }

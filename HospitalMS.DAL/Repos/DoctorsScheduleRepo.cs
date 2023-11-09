@@ -5,45 +5,44 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace HospitalMS.DAL.Repos
 {
-    internal class DepartmentRepo : IRepo<Department, int, bool>
+    internal class DoctorsScheduleRepo : IRepo<DoctorsSchedule, int, DoctorsSchedule>
     {
         private readonly ApplicationDbContext _db;
-        private DbSet<Department> dbSet;
-        public DepartmentRepo(ApplicationDbContext db)
+        private DbSet<DoctorsSchedule> dbSet;
+        public DoctorsScheduleRepo(ApplicationDbContext db)
         {
             _db = db;
-            this.dbSet = _db.Set<Department>();
+            this.dbSet = _db.Set<DoctorsSchedule>();
         }
 
-        public bool Add(Department obj)
+        public DoctorsSchedule Add(DoctorsSchedule obj)
         {
             dbSet.Add(obj);
-            if (_db.SaveChanges() > 0) return true;
-            return false;
+            if (_db.SaveChanges() > 0) return obj;
+            return null;
         }
 
-        public IEnumerable<Department> Get()
+        public IEnumerable<DoctorsSchedule> Get()
         {
-            IQueryable<Department> query = dbSet;
+            IQueryable<DoctorsSchedule> query = dbSet;
             return query.ToList();
         }
 
-        public Department Get(Expression<Func<Department, bool>> filter)
+        public DoctorsSchedule Get(Expression<Func<DoctorsSchedule, bool>> filter)
         {
             var obj = dbSet.Where(filter).AsQueryable().FirstOrDefault();
             if (obj != null) return obj;
             return null;
         }
 
-        public IEnumerable<Department> IncludeProp<TProperty>(Expression<Func<Department, TProperty>> property)
+        public IEnumerable<DoctorsSchedule> IncludeProp<TProperty>(Expression<Func<DoctorsSchedule, TProperty>> property)
         {
-            IQueryable<Department> query = dbSet.Include(property);
+            IQueryable<DoctorsSchedule> query = dbSet.Include(property);
             return query.ToList();
         }
 
@@ -54,16 +53,17 @@ namespace HospitalMS.DAL.Repos
             return _db.SaveChanges() > 0;
         }
 
-        public bool RemoveRange(IEnumerable<Department> obj)
+        public bool RemoveRange(IEnumerable<DoctorsSchedule> obj)
         {
             throw new NotImplementedException();
         }
 
-        public bool Update(Department obj)
+        public DoctorsSchedule Update(DoctorsSchedule obj)
         {
             var exObj = dbSet.Find(obj.Id);
             dbSet.Entry(exObj).CurrentValues.SetValues(obj);
-            return _db.SaveChanges() > 0;
+            return _db.SaveChanges() > 0 ? obj : null;
         }
+
     }
 }

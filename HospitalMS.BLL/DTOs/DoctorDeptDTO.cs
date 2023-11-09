@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace HospitalMS.BLL.DTOs
 {
-    public class DeptDoctorDTO : DepartmentDTO
+    public class DoctorDeptDTO:DoctorDTO
     {
-       public List<DoctorDTO> Doctors { get; set; }
-      //  public DepartmentDTO Department { get; set; }
+        public DepartmentDTO Department { get; set; }
     }
 }

@@ -6,11 +6,10 @@ using System.Threading.Tasks;
 
 namespace HospitalMS.BLL.DTOs
 {
-    public class DepartmentDTO
+    public class RenderTestDTO
     {
-        public int Id { get; set; }
         public string Name { get; set; }
-        //public List<Doctor> Doctors { get; set; }
-        //public List<Staff> Staffs { get; set; }
+        public int Age { get; set; }
+        public string Gender { get; set; }
     }
 }

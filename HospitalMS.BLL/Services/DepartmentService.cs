@@ -13,52 +13,87 @@ namespace HospitalMS.BLL.Services
 {
     public class DepartmentService
     {
-        //private readonly ApplicationDbContext _db;
         private readonly DataAccessFactory _dataAccessFactory;
         public DepartmentService(ApplicationDbContext db)
         {
             _dataAccessFactory = new DataAccessFactory(db);
         }
-        public Department Get(Expression<Func<Department, bool>> filter)
+        public  List<DeptDocStaffDTO> Get()
         {
-            var data = _dataAccessFactory.DepartmentData().Get(filter);
-            if (data != null)
-            {
-                return data;
-            }
-            return null;
-        }
-
-        public List<DeptDoctorDTO> Get()
-        {
-            //var data = _dataAccessFactory.DepartmentData().Get().ToList();
-            var data = _dataAccessFactory.DepartmentData().IncludeProp(u => u.Doctors).ToList();
+            var data = _dataAccessFactory.DepartmentData().Get();
             if (data != null)
             {
                 var cfg = new MapperConfiguration(c =>
                 {
-                    c.CreateMap<Department, DeptDoctorDTO>();
+                    c.CreateMap<Department, DeptDocStaffDTO>();
                     c.CreateMap<Doctor, DoctorDTO>();
-                    // c.CreateMap<Staff, StaffDTO>();
+                    c.CreateMap<Staff, StaffDTO>();
                 });
                 var mapper = new Mapper(cfg);
-                var mapped = mapper.Map<List<DeptDoctorDTO>>(data);
+                var mapped = mapper.Map<List<DeptDocStaffDTO>>(data);
                 return mapped;
             }
             return null;
         }
-
-        public bool Create(Department dept)
+        //public  DeptDocStaffDTO Get(int id)
+        //{
+        //    var data = _dataAccessFactory.DepartmentData().Get(id);
+        //    if (data != null)
+        //    {
+        //        var cfg = new MapperConfiguration(c =>
+        //        {
+        //            c.CreateMap<Department, DeptDocStaffDTO>();
+        //            c.CreateMap<Doctor, DoctorDTO>();
+        //            // c.CreateMap<Staff, StaffDTO>();
+        //        });
+        //        var mapper = new Mapper(cfg);
+        //        var mapped = mapper.Map<DeptDocStaffDTO>(data);
+        //        return mapped;
+        //    }
+        //    return null;
+        //}
+        public  DepartmentDTO Get(int id)
         {
-            var res = _dataAccessFactory.DepartmentData().Add(dept);
+            var data = _dataAccessFactory.DepartmentData().Get(id);
+            if (data != null)
+            {
+                var cfg = new MapperConfiguration(c =>
+                {
+                    c.CreateMap<Department, DepartmentDTO>();
+                });
+                var mapper = new Mapper(cfg);
+                return mapper.Map<DepartmentDTO>(data);
+            }
+            return null;
+        }
+
+        public  bool Create(DepartmentDTO dept)
+        {
+
+            var cfg = new MapperConfiguration(c =>
+            {
+                c.CreateMap<DepartmentDTO, Department>();
+            });
+            var mapper = new Mapper(cfg);
+            var mapped = mapper.Map<Department>(dept);
+            var res = _dataAccessFactory.DepartmentData().Create(mapped);
             return (res != null);
         }
-
-        public bool Update(Department dept)
+        public  bool Update(DepartmentDTO dept)
         {
-            var res = _dataAccessFactory.DepartmentData().Update(dept);
+            var cfg = new MapperConfiguration(c =>
+            {
+                c.CreateMap<DepartmentDTO, Department>();
+            });
+            var mapper = new Mapper(cfg);
+            var mapped = mapper.Map<Department>(dept);
+            var res = _dataAccessFactory.DepartmentData().Update(mapped);
             return (res != null) ? true : false;
-        }
 
+        }
+        public  bool Delete(int id)
+        {
+            return (_dataAccessFactory.DepartmentData().Delete(id));
+        }
     }
 }

@@ -11,16 +11,16 @@ using System.Threading.Tasks;
 
 namespace HospitalMS.DAL.Models
 {
-    public class Department
+    public class Ward
     {
         public int Id { get; set; }
-        [Required, StringLength(20)]
         public string Name { get; set; }
-        public virtual ICollection<Doctor> Doctors { get; set; }
-        public virtual ICollection<Staff> Staffs { get; set; }
-        public virtual ICollection<DiagList> DiagLists { get; set; }
-       
-
+        public int BedCout { get; set; }
+        public int Rent { get; set; }
+        public virtual ICollection<IPDAdmit> IPDAdmits { get; set; }
+        public Ward()
+        {
+            IPDAdmits = new List<IPDAdmit>();
+        }
     }
 }
-

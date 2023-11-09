@@ -5,45 +5,44 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace HospitalMS.DAL.Repos
 {
-    internal class DepartmentRepo : IRepo<Department, int, bool>
+    internal class LeaveApplicationRepo : IRepo<LeaveApplication, int, LeaveApplication>
     {
         private readonly ApplicationDbContext _db;
-        private DbSet<Department> dbSet;
-        public DepartmentRepo(ApplicationDbContext db)
+        private DbSet<LeaveApplication> dbSet;
+        public LeaveApplicationRepo(ApplicationDbContext db)
         {
             _db = db;
-            this.dbSet = _db.Set<Department>();
+            this.dbSet = _db.Set<LeaveApplication>();
         }
 
-        public bool Add(Department obj)
+        public LeaveApplication Add(LeaveApplication obj)
         {
             dbSet.Add(obj);
-            if (_db.SaveChanges() > 0) return true;
-            return false;
+            if (_db.SaveChanges() > 0) return obj;
+            return null;
         }
 
-        public IEnumerable<Department> Get()
+        public IEnumerable<LeaveApplication> Get()
         {
-            IQueryable<Department> query = dbSet;
+            IQueryable<LeaveApplication> query = dbSet;
             return query.ToList();
         }
 
-        public Department Get(Expression<Func<Department, bool>> filter)
+        public LeaveApplication Get(Expression<Func<LeaveApplication, bool>> filter)
         {
             var obj = dbSet.Where(filter).AsQueryable().FirstOrDefault();
             if (obj != null) return obj;
             return null;
         }
 
-        public IEnumerable<Department> IncludeProp<TProperty>(Expression<Func<Department, TProperty>> property)
+        public IEnumerable<LeaveApplication> IncludeProp<TProperty>(Expression<Func<LeaveApplication, TProperty>> property)
         {
-            IQueryable<Department> query = dbSet.Include(property);
+            IQueryable<LeaveApplication> query = dbSet.Include(property);
             return query.ToList();
         }
 
@@ -54,16 +53,17 @@ namespace HospitalMS.DAL.Repos
             return _db.SaveChanges() > 0;
         }
 
-        public bool RemoveRange(IEnumerable<Department> obj)
+        public bool RemoveRange(IEnumerable<LeaveApplication> obj)
         {
             throw new NotImplementedException();
         }
 
-        public bool Update(Department obj)
+        public LeaveApplication Update(LeaveApplication obj)
         {
             var exObj = dbSet.Find(obj.Id);
             dbSet.Entry(exObj).CurrentValues.SetValues(obj);
-            return _db.SaveChanges() > 0;
+            return _db.SaveChanges() > 0 ? obj : null;
         }
+
     }
 }

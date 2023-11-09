@@ -5,45 +5,44 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace HospitalMS.DAL.Repos
 {
-    internal class DepartmentRepo : IRepo<Department, int, bool>
+    internal class DoctorRepo : IRepo<Doctor, int, Doctor>
     {
         private readonly ApplicationDbContext _db;
-        private DbSet<Department> dbSet;
-        public DepartmentRepo(ApplicationDbContext db)
+        private DbSet<Doctor> dbSet;
+        public DoctorRepo(ApplicationDbContext db)
         {
             _db = db;
-            this.dbSet = _db.Set<Department>();
+            this.dbSet = _db.Set<Doctor>();
         }
 
-        public bool Add(Department obj)
+        public Doctor Add(Doctor obj)
         {
             dbSet.Add(obj);
-            if (_db.SaveChanges() > 0) return true;
-            return false;
+            if (_db.SaveChanges() > 0) return obj;
+            return null;
         }
 
-        public IEnumerable<Department> Get()
+        public IEnumerable<Doctor> Get()
         {
-            IQueryable<Department> query = dbSet;
+            IQueryable<Doctor> query = dbSet;
             return query.ToList();
         }
 
-        public Department Get(Expression<Func<Department, bool>> filter)
+        public Doctor Get(Expression<Func<Doctor, bool>> filter)
         {
             var obj = dbSet.Where(filter).AsQueryable().FirstOrDefault();
             if (obj != null) return obj;
             return null;
         }
 
-        public IEnumerable<Department> IncludeProp<TProperty>(Expression<Func<Department, TProperty>> property)
+        public IEnumerable<Doctor> IncludeProp<TProperty>(Expression<Func<Doctor, TProperty>> property)
         {
-            IQueryable<Department> query = dbSet.Include(property);
+            IQueryable<Doctor> query = dbSet.Include(property);
             return query.ToList();
         }
 
@@ -54,16 +53,17 @@ namespace HospitalMS.DAL.Repos
             return _db.SaveChanges() > 0;
         }
 
-        public bool RemoveRange(IEnumerable<Department> obj)
+        public bool RemoveRange(IEnumerable<Doctor> obj)
         {
             throw new NotImplementedException();
         }
 
-        public bool Update(Department obj)
+        public Doctor Update(Doctor obj)
         {
             var exObj = dbSet.Find(obj.Id);
             dbSet.Entry(exObj).CurrentValues.SetValues(obj);
-            return _db.SaveChanges() > 0;
+            return _db.SaveChanges() > 0 ? obj : null;
         }
+
     }
 }
