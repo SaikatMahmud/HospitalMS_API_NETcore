@@ -1,4 +1,6 @@
-﻿using HospitalMS.DAL;
+﻿using AutoMapper;
+using HospitalMS.BLL.DTOs;
+using HospitalMS.DAL;
 using HospitalMS.DAL.Models;
 using System;
 using System.Collections.Generic;
@@ -27,12 +29,21 @@ namespace HospitalMS.BLL.Services
             return null;
         }
 
-        public List<Department> Get()
+        public List<DeptDoctorDTO> Get()
         {
-            var data = _dataAccessFactory.DepartmentData().Get().ToList();
+            //var data = _dataAccessFactory.DepartmentData().Get().ToList();
+            var data = _dataAccessFactory.DepartmentData().IncludeProp(u => u.Doctors).ToList();
             if (data != null)
             {
-                return data;
+                var cfg = new MapperConfiguration(c =>
+                {
+                    c.CreateMap<Department, DeptDoctorDTO>();
+                    c.CreateMap<Doctor, DoctorDTO>();
+                    // c.CreateMap<Staff, StaffDTO>();
+                });
+                var mapper = new Mapper(cfg);
+                var mapped = mapper.Map<List<DeptDoctorDTO>>(data);
+                return mapped;
             }
             return null;
         }
@@ -43,8 +54,8 @@ namespace HospitalMS.BLL.Services
             return (res != null);
         }
 
-        public  bool Update(Department dept)
-        {       
+        public bool Update(Department dept)
+        {
             var res = _dataAccessFactory.DepartmentData().Update(dept);
             return (res != null) ? true : false;
         }

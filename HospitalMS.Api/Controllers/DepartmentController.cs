@@ -1,4 +1,5 @@
 ﻿using HospitalMS.BLL;
+using HospitalMS.BLL.DTOs;
 using HospitalMS.BLL.Services;
 using HospitalMS.DAL.Models;
 using Microsoft.AspNetCore.Http;
@@ -22,7 +23,7 @@ namespace HospitalMS.Api.Controllers
         [Route("api/dept/all")]
         public JsonResult Get()
         {
-            var obj = _unitOfWork.Department.Get();
+            List<DeptDoctorDTO> obj = _unitOfWork.Department.Get();
             return new JsonResult(new { obj });
         }
 

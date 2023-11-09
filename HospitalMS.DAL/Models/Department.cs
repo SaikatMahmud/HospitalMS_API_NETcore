@@ -16,5 +16,11 @@ namespace HospitalMS.DAL.Models
         public int DepartmentId { get; set; }
         [Required, StringLength(40)]
         public string Name { get; set; }
+        public ICollection<Doctor> Doctors { get; set; }
+
+        public Department()
+        {
+            Doctors = new List<Doctor>();
+        }
     }
 }

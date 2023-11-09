@@ -7,11 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\HospitalMS.DAL\HospitalMS.DAL.csproj" />
+    <PackageReference Include="AutoMapper" Version="12.0.1" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="DTOs\" />
+    <ProjectReference Include="..\HospitalMS.DAL\HospitalMS.DAL.csproj" />
   </ItemGroup>
 
 </Project>
