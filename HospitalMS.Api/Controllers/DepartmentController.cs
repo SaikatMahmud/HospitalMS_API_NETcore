@@ -21,24 +21,33 @@ namespace HospitalMS.Api.Controllers
 
         [HttpGet]
         [Route("api/dept/all")]
-        public JsonResult Get()
+        public IActionResult Get()
         {
-            List<DeptDoctorDTO> obj = _unitOfWork.Department.Get();
-            return new JsonResult(new { obj });
+            try
+            {
+                return  Ok(_unitOfWork.Department.Get());
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
-
         [HttpGet]
         [Route("api/dept/{id}")]
-        public JsonResult Get(int id)
+        public IActionResult Get(int id)
         {
-            var obj = _unitOfWork.Department.Get(u => u.DepartmentId == id);
-            return new JsonResult(new { obj });
+            try
+            {
+                return Ok(_unitOfWork.Department.Get(id));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
-
-
         [HttpPost]
         [Route("api/dept/add")]
-        public IActionResult Add(Department dept)
+        public IActionResult Add(DepartmentDTO dept)
         {
             try
             {
@@ -49,18 +58,17 @@ namespace HospitalMS.Api.Controllers
                 }
                 else
                 {
-                    return Ok(new { Msg = "Not Inserted", Data = dept });
+                    return BadRequest(new { Msg = "Not Inserted", Data = dept });
                 }
             }
             catch (Exception ex)
             {
-                return Ok( new { Msg = ex.Message, Data = dept });
+                return StatusCode(StatusCodes.Status500InternalServerError, new { Msg = ex.Message, Data = dept });
             }
         }
-
-        [HttpPut]
+        [HttpPost]
         [Route("api/dept/update")]
-        public IActionResult Update(Department dept)
+        public IActionResult Update(DepartmentDTO dept)
         {
             try
             {
@@ -71,12 +79,33 @@ namespace HospitalMS.Api.Controllers
                 }
                 else
                 {
-                    return BadRequest(new { Msg = "Not Updated", Data = dept });
+                    return BadRequest( new { Msg = "Not Updated", Data = dept });
                 }
             }
             catch (Exception ex)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, new { Msg = ex.Message, Data = dept });
+            }
+        }
+        [HttpPost]
+        [Route("api/dept/delete/{id}")]
+        public IActionResult Delete(int id)
+        {
+            try
+            {
+                var res = _unitOfWork.Department.Delete(id);
+                if (res)
+                {
+                    return Ok(new { Msg = "Delete Success" });
+                }
+                else
+                {
+                    return BadRequest( new { Msg = "Delete failed" });
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new { Msg = ex.Message });
             }
         }
 

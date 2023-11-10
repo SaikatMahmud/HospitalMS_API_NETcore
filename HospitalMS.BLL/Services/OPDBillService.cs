@@ -38,7 +38,7 @@ namespace HospitalMS.BLL.Services
 
         public  OPDBillDTO Get(int id)
         {
-            var data = _dataAccessFactory.OPDBillData().Get(id);
+            var data = _dataAccessFactory.OPDBillData().Get(opd => opd.Id == id);
             if (data != null)
             {
                 var cfg = new MapperConfiguration(c =>
@@ -60,10 +60,10 @@ namespace HospitalMS.BLL.Services
                 PaidAmount = opd.PaidAmount,
                 BillDate = DateTime.Now,
             };
-            var OPDBill = _dataAccessFactory.OPDBillData().Create(OPDData);
+            var OPDBill = _dataAccessFactory.OPDBillData().Add(OPDData);
             foreach (var item in opd.DiagId.ToArray())
             {
-                var Diagnosis = _dataAccessFactory.DiagListData().Get(item);
+                var Diagnosis = _dataAccessFactory.DiagListData().Get(diag=> diag.Id == item);
                 totalAmout += (int)Diagnosis.Cost;
                 var diagnosisData = new PerformDiag
                 {
@@ -72,7 +72,7 @@ namespace HospitalMS.BLL.Services
                     Status = "Pending",
                     Cost = (int)Diagnosis.Cost
                 };
-                var PerfomedDiag = _dataAccessFactory.PerformDiagData().Create(diagnosisData);
+                var PerfomedDiag = _dataAccessFactory.PerformDiagData().Add(diagnosisData);
                 var OPDDetailsData = new OPDBillDetails
                 {
                     OPDBillId = OPDBill.Id,
@@ -80,9 +80,9 @@ namespace HospitalMS.BLL.Services
                     Amount = (int)PerfomedDiag.Cost,
                     PerformDiagId = PerfomedDiag.Id,
                 };
-                var BillDetails = _dataAccessFactory.OPDBillDetailsData().Create(OPDDetailsData);
+                var BillDetails = _dataAccessFactory.OPDBillDetailsData().Add(OPDDetailsData);
             }
-            var existOPDBill = _dataAccessFactory.OPDBillData().Get(OPDBill.Id);
+            var existOPDBill = _dataAccessFactory.OPDBillData().Get(opd=> opd.Id == OPDBill.Id);
             existOPDBill.BillAmount = totalAmout;
             if (totalAmout == opd.PaidAmount)
             {

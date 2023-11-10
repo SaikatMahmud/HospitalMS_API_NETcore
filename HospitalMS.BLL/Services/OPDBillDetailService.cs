@@ -20,7 +20,7 @@ namespace HospitalMS.BLL.Services
         }
         public  OPDBillAllDetailsDTO GetAllInfo(int odpBilId)
         {
-            var opdBill = _dataAccessFactory.OPDBillData().Get(odpBilId);
+            var opdBill = _dataAccessFactory.OPDBillData().Get(opd => opd.Id == odpBilId);
             var data = _dataAccessFactory.OPDBillDetailsData().Get();
             var billDetails = (from d in data where d.OPDBillId == odpBilId select d).ToList();
             if (billDetails != null)
@@ -73,7 +73,7 @@ namespace HospitalMS.BLL.Services
         }
         public  byte[] PrintOPDBillDetails(int opdBillId)
         {
-            var result = BLL.GeneratePDF.GetPDF("OPDBillAllDetails", GetAllInfo(opdBillId));
+            var result = GeneratePDF.GetPDF("OPDBillAllDetails", GetAllInfo(opdBillId));
             return result;
         }
     }

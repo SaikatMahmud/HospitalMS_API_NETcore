@@ -1,0 +1,28 @@
+﻿
+<html>
+<body>
+    <div style="background: ghostwhite;
+            font-size: 20px;
+            padding: 25px;
+            border: 1px solid black;
+            margin-left: 80px; margin-right:80px; margin-top:10px">
+        <h2 align="center">XYZ Hospital Limited</h2>
+        <p align="center">Doctor's appointment <i>#@Model.Id</i></p>
+
+        <div align="left">
+            <div align="left">
+                <b>Doctor Name:</b> @Model.Doctor.Name<br><br />
+                <b>Doctor Room:</b> @Model.Doctor.Room<br><br />
+                <b>Fee:</b> @Model.Fee<br /><br />
+                <b>Consult time:</b> @Model.ScheduleDate.ToString("yyyy-MM-dd") - @Model.ScheduleTime<br /><br />
+                <b>Patient Name:</b> @Model.Patient.Name<br><br />
+                <b>Patient contact :</b>@Model.Patient.Mobile<br /><br /><br />
+                <b>Status :</b> @Model.Status<br /><br /><br />
+
+            </div><br>
+
+        </div>
+    </div>
+</body>
+
+</html>

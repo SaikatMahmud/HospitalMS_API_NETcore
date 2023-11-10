@@ -40,7 +40,7 @@ namespace HospitalMS.BLL.Services
         }
         public  LeaveApplicationDTO Get(int id)
         {
-            var data = _dataAccessFactory.LeaveApplicationData().Get(id);
+            var data = _dataAccessFactory.LeaveApplicationData().Get(l => l.Id == id);
             if (data != null)
             {
                 var cfg = new MapperConfiguration(c =>
@@ -62,7 +62,7 @@ namespace HospitalMS.BLL.Services
             });
             var mapper = new Mapper(cfg);
             var mapped = mapper.Map<LeaveApplication>(la);
-            var res = _dataAccessFactory.LeaveApplicationData().Create(mapped);
+            var res = _dataAccessFactory.LeaveApplicationData().Add(mapped);
             return (res != null);
         }
         public  bool Update(LeaveApplicationDTO la)
@@ -80,14 +80,14 @@ namespace HospitalMS.BLL.Services
 
         public  bool ApproveApplication(int id)
         {
-            var existing = _dataAccessFactory.LeaveApplicationData().Get(id);
+            var existing = _dataAccessFactory.LeaveApplicationData().Get(l => l.Id == id);
             existing.Status = "Approved";
             var res = _dataAccessFactory.LeaveApplicationData().Update(existing);
             return (res != null) ? true : false;
         }
         public  bool RejectApplication(int id)
         {
-            var existing = _dataAccessFactory.LeaveApplicationData().Get(id);
+            var existing = _dataAccessFactory.LeaveApplicationData().Get(l => l.Id == id);
             existing.Status = "Rejected";
             var res = _dataAccessFactory.LeaveApplicationData().Update(existing);
             return (res != null) ? true : false;
@@ -95,7 +95,7 @@ namespace HospitalMS.BLL.Services
 
         public  bool Delete(int id)
         {
-            return (_dataAccessFactory.LeaveApplicationData().Delete(id));
+            return (_dataAccessFactory.LeaveApplicationData().Remove(id));
         }
     }
 

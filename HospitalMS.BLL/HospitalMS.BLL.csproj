@@ -12,10 +12,17 @@
 
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="12.0.1" />
+    <PackageReference Include="itext7" Version="8.0.2" />
+    <PackageReference Include="itext7.pdfhtml" Version="5.0.2" />
+    <PackageReference Include="RazorEngine" Version="3.10.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\HospitalMS.DAL\HospitalMS.DAL.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Views\" />
   </ItemGroup>
 
 </Project>

@@ -21,7 +21,7 @@ namespace HospitalMS.BLL.Services
         public  List<PatientDTO> Get()
         {
             var data = _dataAccessFactory.PatientData().Get();
-            return Convert(data);
+            return Convert(data.ToList());
         }
         public  List<PatientDTO> GetPatients()
         {
@@ -36,13 +36,13 @@ namespace HospitalMS.BLL.Services
         }
         public  PatientDTO Get(int id)
         {
-            return Convert(_dataAccessFactory.PatientData().Get(id));
+            return Convert(_dataAccessFactory.PatientData().Get(p=>p.Id == id));
         }
 
         public  bool Create(PatientDTO patient)
         {
             var data = Convert(patient);
-            var res = _dataAccessFactory.PatientData().Create(data);
+            var res = _dataAccessFactory.PatientData().Add(data);
 
             if (res != null)
             {
@@ -53,7 +53,7 @@ namespace HospitalMS.BLL.Services
                     Type = "Patient"
                 };
                 _ = Task.Run(() => SendEmail.SendNewUserEmail(patient.Email, user.Password, user.Type));
-                _dataAccessFactory.UserData().Create(user);
+                _dataAccessFactory.UserData().Add(user);
 
 
                 return true;
@@ -70,7 +70,7 @@ namespace HospitalMS.BLL.Services
         }
         public  bool Delete(int id)
         {
-            return (_dataAccessFactory.PatientData().Delete(id));
+            return (_dataAccessFactory.PatientData().Remove(id));
         }
 
         public  int OPDCount(int PatientId)

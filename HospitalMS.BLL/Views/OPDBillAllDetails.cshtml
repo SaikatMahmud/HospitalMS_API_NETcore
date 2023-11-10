@@ -1,0 +1,42 @@
+﻿<html>
+</head>
+<body>
+    <div style="background: oldlace ;
+            font-size: 20px;
+            padding: 25px;
+            border: 1px solid black;
+            margin-left: 80px; margin-right:80px; margin-top:10px">
+        <h2 align="center">XYZ Hospital Limited</h2>
+        <p align="center">Receipt of OPD Bill <i>#@Model.OPDBillId</i></p>
+
+        <div align="left">
+            <b>Patient Name:</b> @Model.PatientName<br>
+            <b>Referred by:</b> Dr. @Model.DoctorName<br>
+
+        </div><br>
+        <div align="left">
+            <b>Status:</b> @Model.Status<br>
+            <b>Bill Date:</b> @Model.BillDate
+        </div>
+        <div>
+            <div style="text-align: right;">
+                <b>Bill Details:</b><br>
+                <hr>
+                @foreach (var item in @Model.DiagInfo)
+                {
+
+                    <hr width="20%" align="right">
+                    @item.DiagnosisName
+                    <text> &nbsp; &nbsp;-</text>
+                    @item.Amount
+                    <br>
+                }
+                <hr>
+                <b>Total Amount:</b> @Model.TotalAmount
+            </div>
+            <br>
+        </div>
+    </div>
+</body>
+
+</html>

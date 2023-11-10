@@ -40,7 +40,7 @@ namespace HospitalMS.BLL.Services
         }
         public  AppointmentDTO Get(int id)
         {
-            var data = _dataAccessFactory.AppointmentData().Get(id);
+            var data = _dataAccessFactory.AppointmentData().Get(a=> a.Id == id);
             if (data != null)
             {
                 var cfg = new MapperConfiguration(c =>
@@ -74,7 +74,7 @@ namespace HospitalMS.BLL.Services
         }
         public  bool Update(AppointmentDTO obj)
         {
-            var exist = _dataAccessFactory.AppointmentData().Get(obj.Id);
+            var exist = _dataAccessFactory.AppointmentData().Get(a=> a.Id == obj.Id);
             var data = new Appointment()
             {
                 Id = obj.Id,
@@ -93,18 +93,18 @@ namespace HospitalMS.BLL.Services
         }
         public  bool Delete(int id)
         {
-            return (_dataAccessFactory.AppointmentData().Delete(id));
+            return (_dataAccessFactory.AppointmentData().Remove(id));
         }
         public  bool CancelAppointment(int id)
         {
-            var existing = _dataAccessFactory.AppointmentData().Get(id);
+            var existing = _dataAccessFactory.AppointmentData().Get(a => a.Id == id);
             existing.Status = "Cancelled";
             var res = _dataAccessFactory.AppointmentData().Update(existing);
             return (res != null) ? true : false;
         }
         public  bool CloseAppointment(int id)
         {
-            var existing = _dataAccessFactory.AppointmentData().Get(id);
+            var existing = _dataAccessFactory.AppointmentData().Get(a => a.Id == id);
             existing.Status = "Closed";
             var res = _dataAccessFactory.AppointmentData().Update(existing);
             return (res != null) ? true : false;
@@ -127,7 +127,7 @@ namespace HospitalMS.BLL.Services
 
         public  byte[] PrintAppointment(int appointmentId)
         {
-            var result = BLL.GeneratePDF.GetPDF("AppointmentDetails", Get(appointmentId));
+            var result = GeneratePDF.GetPDF("AppointmentDetails", Get(appointmentId));
             return result;
         }
 

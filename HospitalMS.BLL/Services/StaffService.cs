@@ -34,7 +34,7 @@ namespace HospitalMS.BLL.Services
         }
         public  StaffDTO Get(int id)
         {
-            var data = _dataAccessFactory.StaffData().Get(id);
+            var data = _dataAccessFactory.StaffData().Get(s=> s.Id == id);
             if (data != null)
             {
                 var cfg = new MapperConfiguration(c =>
@@ -56,7 +56,7 @@ namespace HospitalMS.BLL.Services
             });
             var mapper = new Mapper(cfg);
             var mapped = mapper.Map<Staff>(staff);
-            var res = _dataAccessFactory.StaffData().Create(mapped);
+            var res = _dataAccessFactory.StaffData().Add(mapped);
             return (res != null);
         }
         public  bool Update(StaffDTO staff)
@@ -73,7 +73,7 @@ namespace HospitalMS.BLL.Services
         }
         public  bool Delete(int id)
         {
-            return (_dataAccessFactory.StaffData().Delete(id));
+            return (_dataAccessFactory.StaffData().Remove(id));
         }
     }
 }

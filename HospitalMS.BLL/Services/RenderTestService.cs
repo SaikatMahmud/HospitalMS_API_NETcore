@@ -2,6 +2,11 @@
 using HospitalMS.BLL.DTOs;
 using HospitalMS.DAL;
 using HospitalMS.DAL.Models;
+using iText.Html2pdf;
+using iText.Kernel.Geom;
+using iText.Kernel.Pdf;
+using RazorEngine;
+using RazorEngine.Templating;
 using System;
 using System.Collections.Generic;
 using System.Linq;

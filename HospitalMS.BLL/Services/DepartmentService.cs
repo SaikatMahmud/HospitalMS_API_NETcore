@@ -18,9 +18,10 @@ namespace HospitalMS.BLL.Services
         {
             _dataAccessFactory = new DataAccessFactory(db);
         }
-        public  List<DeptDocStaffDTO> Get()
+        public List<DeptDocStaffDTO> Get()
         {
-            var data = _dataAccessFactory.DepartmentData().Get();
+            var data = _dataAccessFactory.DepartmentData().IncludeProp(d => d.Doctors);
+            data = _dataAccessFactory.DepartmentData().IncludeProp(d => d.Staffs);
             if (data != null)
             {
                 var cfg = new MapperConfiguration(c =>
@@ -52,9 +53,9 @@ namespace HospitalMS.BLL.Services
         //    }
         //    return null;
         //}
-        public  DepartmentDTO Get(int id)
+        public DepartmentDTO Get(int id)
         {
-            var data = _dataAccessFactory.DepartmentData().Get(id);
+            var data = _dataAccessFactory.DepartmentData().Get(d => d.Id == id);
             if (data != null)
             {
                 var cfg = new MapperConfiguration(c =>
@@ -67,7 +68,7 @@ namespace HospitalMS.BLL.Services
             return null;
         }
 
-        public  bool Create(DepartmentDTO dept)
+        public bool Create(DepartmentDTO dept)
         {
 
             var cfg = new MapperConfiguration(c =>
@@ -76,10 +77,10 @@ namespace HospitalMS.BLL.Services
             });
             var mapper = new Mapper(cfg);
             var mapped = mapper.Map<Department>(dept);
-            var res = _dataAccessFactory.DepartmentData().Create(mapped);
+            var res = _dataAccessFactory.DepartmentData().Add(mapped);
             return (res != null);
         }
-        public  bool Update(DepartmentDTO dept)
+        public bool Update(DepartmentDTO dept)
         {
             var cfg = new MapperConfiguration(c =>
             {
@@ -91,9 +92,9 @@ namespace HospitalMS.BLL.Services
             return (res != null) ? true : false;
 
         }
-        public  bool Delete(int id)
+        public bool Delete(int id)
         {
-            return (_dataAccessFactory.DepartmentData().Delete(id));
+            return (_dataAccessFactory.DepartmentData().Remove(id));
         }
     }
 }

@@ -45,7 +45,7 @@ namespace HospitalMS.BLL.Services
                     token.CreatedBy = Username;
                     token.CreatedAt = DateTime.Now;
                     token.TKey = Guid.NewGuid().ToString();
-                    var ret = _dataAccessFactory.TokenData().Create(token);
+                    var ret = _dataAccessFactory.TokenData().Add(token);
                     if (ret != null)
                     {
                         var cfg = new MapperConfiguration(c =>
@@ -61,7 +61,7 @@ namespace HospitalMS.BLL.Services
         }
         public  TokenDTO IsTokenValid(string tkey)//return token obj
         {
-            var extk = _dataAccessFactory.TokenData().Get(tkey);
+            var extk = _dataAccessFactory.TokenData().Get(t=> t.TKey == tkey);
             if (extk != null && extk.ExpiredAt == null)
             {
                 var cfg = new MapperConfiguration(c =>
@@ -78,14 +78,14 @@ namespace HospitalMS.BLL.Services
             var token = IsTokenValid(tkey);
             if (token != null)
             {
-                var user = _dataAccessFactory.UserData().Get(token.CreatedBy);
+                var user = _dataAccessFactory.UserData().Get(u=> u.Username == token.CreatedBy);
                 return user.Type.ToString();
             }
             return null;
         }
         public  bool Logout(string tkey)
         {
-            var extk = _dataAccessFactory.TokenData().Get(tkey);
+            var extk = _dataAccessFactory.TokenData().Get(t=> t.TKey == tkey);
             extk.ExpiredAt = DateTime.Now;
             if (_dataAccessFactory.TokenData().Update(extk) != null) return true;
             return false;
@@ -95,10 +95,10 @@ namespace HospitalMS.BLL.Services
         {
             var token = IsTokenValid(tkey);
 
-            var allStaff = _dataAccessFactory.StaffData().Get();
-            var user = (from s in allStaff
-                        where s.Username.Equals(token.CreatedBy)
-                        select s).SingleOrDefault();
+            var user = _dataAccessFactory.StaffData().Get(s=> s.Username == token.CreatedBy);
+            //var user = (from s in allStaff
+            //            where s.Username.Equals(token.CreatedBy)
+            //            select s).SingleOrDefault();
 
             return user.Id;
         }

@@ -4,6 +4,7 @@ using HospitalMS.DAL;
 using HospitalMS.DAL.Models;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
@@ -47,7 +48,7 @@ namespace HospitalMS.BLL.Services
         }
         public  DoctorDTO Get(int id)
         {
-            var data = _dataAccessFactory.DoctorData().Get(id);
+            var data = _dataAccessFactory.DoctorData().Get(d => d.Id == id);
             if (data != null)
             {
                 var cfg = new MapperConfiguration(c =>
@@ -78,7 +79,7 @@ namespace HospitalMS.BLL.Services
             });
             var mapper = new Mapper(cfg);
             var mapped = mapper.Map<Doctor>(doctor);
-            var res = _dataAccessFactory.DoctorData().Create(mapped);
+            var res = _dataAccessFactory.DoctorData().Add(mapped);
             return (res != null);
         }
         public  bool Update(DoctorDTO doctor)
@@ -95,7 +96,7 @@ namespace HospitalMS.BLL.Services
         }
         public  bool Delete(int id)
         {
-            return (_dataAccessFactory.DoctorData().Delete(id));
+            return (_dataAccessFactory.DoctorData().Remove(id));
         }
 
         public  List<RecepDashboardDTO> RecepDeptWiseDoctor()
